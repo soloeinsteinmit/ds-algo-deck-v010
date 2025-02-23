@@ -1,0 +1,58 @@
+.visualizer-container {
+  width: 100%;
+  padding: 1rem;
+  transition: all 0.3s ease;
+}
+
+.bar {
+  transition: all 0.3s ease-in-out;
+}
+
+.bar.comparing {
+  animation: compareAnimation 1s ease-in-out infinite;
+}
+
+.bar-label {
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+@keyframes compareAnimation {
+  0% {
+    transform: translateY(0);
+    filter: brightness(1);
+  }
+  50% {
+    transform: translateY(-5px);
+    filter: brightness(1.2);
+  }
+  100% {
+    transform: translateY(0);
+    filter: brightness(1);
+  }
+}
+
+/* Add animation for swapping */
+@keyframes swapAnimation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.bar.swapping {
+  animation: swapAnimation 0.3s ease-in-out;
+}
+
+/* Add hover effect */
+.bar:hover {
+  filter: brightness(1.1);
+  cursor: pointer;
+}

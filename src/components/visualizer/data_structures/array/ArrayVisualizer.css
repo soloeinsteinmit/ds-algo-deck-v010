@@ -1,0 +1,157 @@
+/**
+ * Hark! Behold the styles that govern our array's grand performance!
+ * Each class doth play its part in this visual feast.
+ */
+
+.array-visualizer {
+  --animation-duration: 800ms;
+  --element-size: 4rem;
+  --element-gap: 1rem;
+  --insert-color: rgb(34, 197, 94);
+  --delete-color: rgb(239, 68, 68);
+  --update-color: rgb(234, 179, 8);
+  --default-color: rgb(59, 130, 246);
+}
+
+/* Lo! The stage upon which our elements dance */
+.array-container {
+  display: flex;
+  gap: var(--element-gap);
+  padding: 1rem;
+  min-height: calc(var(--element-size) * 2);
+  position: relative;
+  transition: all var(--animation-duration) cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+/* Each element's noble attire */
+.array-element-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  transition: transform var(--animation-duration) cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+}
+
+.array-element {
+  width: var(--element-size);
+  height: var(--element-size);
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  background-color: var(--default-color);
+  transition: background-color var(--animation-duration) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* The grand entrance of a new element */
+.array-container.is-inserting .array-element-wrapper.inserting {
+  animation: insertElement var(--animation-duration) cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  z-index: 1;
+}
+
+/* The rightward march of existing elements */
+.array-container.is-inserting .array-element-wrapper.shifting-right {
+  transform: translateX(calc(var(--element-size) + var(--element-gap)));
+}
+
+/* The color of our new arrival */
+.array-container.is-inserting .array-element-wrapper.inserting .array-element {
+  background-color: var(--insert-color);
+}
+
+/* The transformation of an element */
+.array-container.is-updating .array-element-wrapper.updating .array-element {
+  background-color: var(--update-color);
+  animation: updateElement var(--animation-duration) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Deletion Animation Styles */
+.array-container.is-deleting .array-element-wrapper.deleting {
+  animation: deleteElementFade 400ms ease-in-out forwards;
+  z-index: 2;
+  position: relative;
+}
+
+.array-container.is-deleting .array-element-wrapper.deleting .array-element {
+  background-color: var(--delete-color);
+  animation: deleteElementScale 400ms ease-in-out forwards;
+}
+
+/* Ensure shifting elements maintain their original color */
+.array-container.is-deleting .array-element-wrapper.shifting-left .array-element {
+  background-color: var(--default-color) !important;
+}
+
+.array-container.is-deleting .array-element-wrapper.shifting-left {
+  animation: shiftLeft 300ms ease-in-out forwards;
+  animation-delay: 400ms; /* Start only after deletion is complete */
+}
+
+@keyframes insertElement {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) translateY(-100%);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1) translateY(-50%);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* The dance of transformation */
+@keyframes updateElement {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2) rotate(180deg);
+  }
+  100% {
+    transform: scale(1) rotate(360deg);
+  }
+}
+
+@keyframes deleteElementFade {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(50px);
+    visibility: hidden; /* Ensure it's completely gone */
+  }
+}
+
+@keyframes deleteElementScale {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+    background-color: var(--delete-color);
+  }
+  100% {
+    transform: scale(0.5);
+    background-color: var(--delete-color);
+  }
+}
+
+@keyframes shiftLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc((var(--element-size) + var(--element-gap)) * -1));
+  }
+}
