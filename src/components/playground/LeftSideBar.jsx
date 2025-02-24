@@ -268,7 +268,7 @@ const LeftSideBar = () => {
               Topics
             </Button>
           </div>
-          <Tooltip content="Show Implemented Only" showArrow placement="top">
+          <Tooltip content="Show Implemented Only" showArrow placement="bottom">
             <Button
               size="sm"
               isIconOnly
