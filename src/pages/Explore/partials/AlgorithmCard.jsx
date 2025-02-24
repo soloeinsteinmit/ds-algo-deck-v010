@@ -9,52 +9,94 @@ const AlgorithmCard = ({
   const [sortedIndexes, setSortedIndexes] = useState([]);
   const [comparing, setComparing] = useState([]);
   const [isSorting, setIsSorting] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const sortingRef = useRef(false);
   const [isArraySorted, setIsArraySorted] = useState(false);
   const [speed, setSpeed] = useState(0.5);
+  const animationTimeoutRef = useRef(null);
+  const currentProgressRef = useRef({ i: 0, j: 0 });
 
-  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  useEffect(() => {
+    return () => {
+      if (animationTimeoutRef.current) {
+        clearTimeout(animationTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const sleep = (ms) =>
+    new Promise((resolve) => {
+      animationTimeoutRef.current = setTimeout(resolve, ms);
+    });
 
   const bubbleSort = async () => {
-    // TODO: if array is sorted, disable button
-    if (isArraySorted === true) {
-      setIsArraySorted(false);
+    if (isArraySorted) {
+      resetArray();
       return;
     }
 
-    setIsSorting(true);
-    sortingRef.current = true;
+    if (isPaused) {
+      setIsPaused(false);
+      sortingRef.current = true;
+      return;
+    }
+
+    if (!isSorting) {
+      setIsSorting(true);
+      sortingRef.current = true;
+      setIsArraySorted(false);
+    }
 
     let arr = [...array];
     let n = arr.length;
 
-    for (let i = 0; i < n - 1; i++) {
-      for (let j = 0; j < n - i - 1; j++) {
+    for (
+      let i = currentProgressRef.current.i;
+      i < n - 1 && sortingRef.current;
+      i++
+    ) {
+      for (
+        let j =
+          i === currentProgressRef.current.i ? currentProgressRef.current.j : 0;
+        j < n - i - 1 && sortingRef.current;
+        j++
+      ) {
+        currentProgressRef.current = { i, j };
         setComparing([j, j + 1]);
-        await sleep(speed * 1000);
+        await sleep((1 - speed) * 1000); // Invert speed for more intuitive control
 
         if (arr[j] > arr[j + 1]) {
-          // Swap elements
           let temp = arr[j];
           arr[j] = arr[j + 1];
           arr[j + 1] = temp;
           setArray([...arr]);
         }
       }
-      setSortedIndexes((prev) => [...prev, n - 1 - i]);
+      if (sortingRef.current) {
+        setSortedIndexes((prev) => [...prev, n - 1 - i]);
+      }
     }
+
     if (sortingRef.current) {
       setSortedIndexes([...Array(n).keys()]);
+      setIsArraySorted(true);
     }
+
     setComparing([]);
     setIsSorting(false);
-    setIsArraySorted(true);
   };
 
   const resetArray = () => {
+    if (animationTimeoutRef.current) {
+      clearTimeout(animationTimeoutRef.current);
+    }
+    sortingRef.current = false;
     setArray(arr);
     setSortedIndexes([]);
     setComparing([]);
+    setIsSorting(false);
+    setIsArraySorted(false);
+    currentProgressRef.current = { i: 0, j: 0 };
   };
 
   const randomizeArray = () => {
@@ -62,16 +104,26 @@ const AlgorithmCard = ({
     for (let i = 0; i < 12; i++) {
       randomArray.push(Math.floor(Math.random() * 100 + 1));
     }
-    setSortedIndexes([]);
-    setComparing([]);
+    resetArray(); // Use resetArray to ensure proper state cleanup
     setArray(randomArray);
   };
 
-  // TODO: FIX STOP BUG
   const stopSorting = () => {
+    if (animationTimeoutRef.current) {
+      clearTimeout(animationTimeoutRef.current);
+    }
     sortingRef.current = false;
     setIsSorting(false);
+    setIsPaused(false);
     setComparing([]);
+  };
+
+  const pauseSorting = () => {
+    if (animationTimeoutRef.current) {
+      clearTimeout(animationTimeoutRef.current);
+    }
+    sortingRef.current = false;
+    setIsPaused(true);
   };
 
   const getBarHeight = (value) => {
@@ -139,28 +191,50 @@ const AlgorithmCard = ({
             ))}
           </div>
 
-          <div className="mt-10 flex justify-center gap-4">
+          <div className="mt-10 flex flex-wrap justify-center gap-4">
             <Button
               onClick={bubbleSort}
               className=""
               color="primary"
-              isDisabled={isSorting}
+              // isDisabled={isSorting && !isPaused}
+            >
+              {isPaused ? "Resume" : "Sort Array"}
+            </Button>
+
+            {/* <Button
+              onClick={bubbleSort}
+              className=""
+              color="primary"
+              isDisabled={isSorting && !isPaused}
             >
               Sort Array
+            </Button> */}
+
+            <Button
+              onClick={pauseSorting}
+              className=""
+              color="warning"
+              isDisabled={!isSorting || isPaused}
+            >
+              Pause
             </Button>
             <Button
               onClick={stopSorting}
               className=""
               color="danger"
-              isDisabled={!isSorting}
+              isDisabled={!isSorting && !isPaused}
             >
               Stop
             </Button>
             <Button onClick={resetArray} isDisabled={isSorting}>
               Reset
             </Button>
-            <Button onClick={randomizeArray} isDisabled={isSorting}>
-              Randomize numbers
+            <Button
+              onClick={randomizeArray}
+              isDisabled={isSorting}
+              color="secondary"
+            >
+              Randomize
             </Button>
             {/* // TODO: WORK ON THE SPEED SLIDER IT IS OPPPOSITE OF WHAT IT SHOULD
             BE */}

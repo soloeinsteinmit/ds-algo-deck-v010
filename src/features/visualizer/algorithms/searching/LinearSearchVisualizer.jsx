@@ -1,4 +1,3 @@
-// LinearSearchVisualizer.js
 import React, { memo, useMemo } from "react";
 import { useSelector } from "react-redux";
 import "./LinearSearchVisualizer.css";
@@ -173,10 +172,9 @@ function LinearSearchVisualizer() {
     searchComplete,
   } = useSelector((state) => state.linearSearchVisualizer);
 
-  // Ensure visitedIndices is always an array before converting to Set
+  // Convert visitedIndices array to Set
   const visitedSet = useMemo(() => {
-    const indices = Array.isArray(visitedIndices) ? visitedIndices : [];
-    return new Set(indices);
+    return new Set(Array.isArray(visitedIndices) ? visitedIndices : []);
   }, [visitedIndices]);
 
   const getElementClass = (index) => {
@@ -194,8 +192,8 @@ function LinearSearchVisualizer() {
       return classes.join(" ");
     }
 
-    // Element has been visited - ensure we check if visitedSet exists
-    if (visitedSet && visitedSet.has(index)) {
+    // Element has been visited
+    if (visitedSet.has(index)) {
       classes.push("visited");
       return classes.join(" ");
     }

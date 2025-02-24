@@ -20,6 +20,7 @@ import {
   toggleList,
 } from "../../features/playground/playgroundLayoutSlice";
 import { FaCode } from "react-icons/fa6";
+import { ThemeSwitcher } from "../../components/ThemeSwitcher";
 
 function VisualizingPanel() {
   const { currentView } = useSelector((state) => state.visualizer);
@@ -66,25 +67,28 @@ function VisualizingPanel() {
             </Popover>
           </div>
 
-          {/* The Editor Toggle, like a magician's wand */}
-          <Tooltip
-            color="warning"
-            variant={`${isEditorOpen ? "solid" : "flat"}`}
-            content="Open Code Editor"
-            showArrow
-            placement="left"
-          >
-            <Button
-              onClick={() => dispatch(toggleEditor())}
-              className=""
-              size="sm"
+          <div className="flex">
+            {/* The Editor Toggle, like a magician's wand */}
+            <Tooltip
               color="warning"
-              isIconOnly
               variant={`${isEditorOpen ? "solid" : "flat"}`}
+              content="Open Code Editor"
+              showArrow
+              placement="top"
             >
-              <FaCode className="text-base" />
-            </Button>
-          </Tooltip>
+              <Button
+                onClick={() => dispatch(toggleEditor())}
+                className="mr-5"
+                size="sm"
+                color="warning"
+                isIconOnly
+                variant={`${isEditorOpen ? "solid" : "flat"}`}
+              >
+                <FaCode className="text-base" />
+              </Button>
+            </Tooltip>
+            <ThemeSwitcher size="md" color="warning" />
+          </div>
         </div>
       </CardHeader>
 

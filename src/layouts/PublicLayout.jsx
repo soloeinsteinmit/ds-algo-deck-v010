@@ -6,15 +6,15 @@ import { Outlet } from "react-router-dom";
  * @component PublicLayout
  * @description A grand layout that doth wrap our application's content,
  * providing navigation, footer, and space for the main content to flourish.
- * 
+ *
  * @returns {JSX.Element} The rendered layout component
  */
 function PublicLayout() {
   const links = [
     { label: "Explore🔎", href: "/", color: "warning" },
-    { label: "Resources📚", href: "/resources", color: "foreground" },
+    { label: "Dashboard🖥️", href: "/dashboard", color: "foreground" },
     { label: "Playground 🛠🛝", href: "/playground", color: "foreground" },
-    { label: "Practice Mode🧑‍💻", href: "/practice-mode", color: "foreground" },
+    // { label: "Practice Mode🧑‍💻", href: "/practice-mode", color: "foreground" },
   ];
 
   const avatarDetails = {

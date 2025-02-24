@@ -10,5 +10,6 @@ export const playgroundLayoutPersistConfig = {
     "implementedFilter",
     "searchMode",
     "searchQuery",
+    "appTheme",
   ],
 };

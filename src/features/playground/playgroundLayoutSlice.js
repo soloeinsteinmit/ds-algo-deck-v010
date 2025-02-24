@@ -21,6 +21,7 @@ const initialState = {
   implementedFilter: false, // Whether to show only implemented algorithms
   searchMode: "category", // Choices: "category" or "topic"
   searchQuery: "", // Current search query
+  appTheme: "dark", // darke them
 };
 
 /**
@@ -96,6 +97,10 @@ const playgroundLayoutSlice = createSlice({
     setSearchQuery: (state, action) => {
       state.searchQuery = action.payload;
     },
+
+    setAppTheme: (state, action) => {
+      state.appTheme = action.payload;
+    },
   },
 });
 
@@ -113,6 +118,7 @@ export const {
   setListOpen,
   setSearchMode,
   setSearchQuery,
+  setAppTheme,
 } = playgroundLayoutSlice.actions;
 
 export default persistedPlaygroundLayoutSlice;

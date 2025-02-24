@@ -193,7 +193,7 @@ const MonacoEditor = ({ isConsoleMinimized, height = "h-[55vh]" }) => {
 
   return (
     <div className="flex flex-col">
-      <div className="flex-none h-12 border-b border-divider px-4 flex items-center justify-between bg-content2/50">
+      <div className="flex-none h-[57px] border-b border-divider px-4 flex items-center justify-between bg-content2/50">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-default-700">
             Code Editor
