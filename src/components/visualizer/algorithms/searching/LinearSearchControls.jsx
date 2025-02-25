@@ -25,7 +25,7 @@ import {
  * Where buttons fair do guide our merry way,
  * Through pause and play, as night follows day.
  */
-const DEBUG = true;
+const DEBUG = false;
 const debugLog = (...args) => {
   if (DEBUG) {
     console.log("[LinearSearch Debug]:", ...args);
@@ -280,10 +280,10 @@ function LinearSearchControls() {
           value={arraySize}
           onChange={(e) => {
             const value = parseInt(e.target.value);
-            if (value >= 5 && value <= 100) {
-              debugLog("Array size changed to:", value);
-              dispatch(setArraySize(value));
-            }
+            // if (value >= 5 && value <= 100) {
+            debugLog("Array size changed to:", value);
+            dispatch(setArraySize(value));
+            // }
           }}
           className="w-[150px]"
           size="md"

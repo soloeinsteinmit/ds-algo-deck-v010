@@ -55,7 +55,11 @@ export const BubbleSortControls = () => {
     <div className="p-4 space-y-4 flex items-center justify-center">
       <div className="flex gap-4 items-center">
         {!isPlaying && !isPaused && (
-          <Button color="primary" onClick={() => dispatch(setIsPlaying(true))}>
+          <Button
+            color="primary"
+            onClick={() => dispatch(setIsPlaying(true))}
+            className="min-w-[130px]"
+          >
             Start Sorting
           </Button>
         )}
@@ -137,7 +141,7 @@ export const BubbleSortControls = () => {
           onChange={(e) => dispatch(setArraySize(Number(e.target.value)))}
           min={2}
           max={200}
-          className="max-w-[120px]"
+          className="min-w-[120px]"
           isDisabled={isPlaying || isPaused}
         />
         <div className="flex items-center gap-4">

@@ -150,6 +150,95 @@ stateDiagram-v2
     Updating --> Animating
 ```
 
+## 💻 Code Editor Integration
+
+```mermaid
+classDiagram
+    class MonacoEditor {
+        +value: string
+        +language: string
+        +theme: string
+        +onChange()
+        +onExecute()
+    }
+
+    class CodeExecutor {
+        +parseCode()
+        +validateSyntax()
+        +executeCode()
+        +handleError()
+    }
+
+    class ExecutionContext {
+        +scope: object
+        +variables: Map
+        +functions: Map
+        +stepCount: number
+    }
+
+    class VisualizationBridge {
+        +syncState()
+        +updateVisuals()
+        +handleExecutionStep()
+    }
+
+    MonacoEditor --> CodeExecutor
+    CodeExecutor --> ExecutionContext
+    ExecutionContext --> VisualizationBridge
+    VisualizationBridge --> ReduxStore
+```
+
+## 📊 Dashboard Architecture
+
+```mermaid
+classDiagram
+    class DashboardLayout {
+        +activeView: string
+        +metrics: object
+        +render()
+    }
+
+    class PerformanceMetrics {
+        +timeComplexity: string
+        +spaceComplexity: string
+        +calculateMetrics()
+    }
+
+    class AlgorithmComparison {
+        +algorithms: Algorithm[]
+        +comparePerformance()
+        +visualizeComparison()
+    }
+
+    class UserProgress {
+        +completedItems: number
+        +skillLevel: string
+        +updateProgress()
+    }
+
+    DashboardLayout --> PerformanceMetrics
+    DashboardLayout --> AlgorithmComparison
+    DashboardLayout --> UserProgress
+```
+
+## 🔄 Real-time Updates Flow
+
+```mermaid
+sequenceDiagram
+    participant E as Editor
+    participant X as CodeExecutor
+    participant C as ExecutionContext
+    participant V as Visualizer
+    participant S as State
+
+    E->>X: Code Changes
+    X->>C: Parse & Validate
+    C->>V: Execute Step
+    V->>S: Update State
+    S->>V: Reflect Changes
+    V->>E: Update Editor State
+```
+
 ## 🔑 Key Points
 
 1. **Component Hierarchy**
@@ -165,14 +254,28 @@ stateDiagram-v2
    - Visualizer reacts to state changes
    - Animations are triggered by state updates
 
-3. **Animation Flow**
+3. **Code Editor Features**
+   - Monaco Editor integration with syntax highlighting
+   - Real-time code execution and validation
+   - Step-by-step debugging capabilities
+   - Synchronized visualization updates
+   - Error handling and feedback
+
+4. **Dashboard Capabilities**
+   - Performance metrics tracking
+   - Algorithm comparison tools
+   - User progress monitoring
+   - Interactive learning paths
+   - Customizable views
+
+5. **Animation Flow**
    - Operation starts (insert/delete/update)
    - Animation begins
    - Array is updated
    - Animation completes
    - State is reset
 
-4. **File Organization**
+6. **File Organization**
    - Clear separation of concerns
    - Components are modular
    - State management is centralized

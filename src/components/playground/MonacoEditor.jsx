@@ -8,6 +8,7 @@ import {
   DropdownItem,
   Button,
   Slider,
+  Tooltip,
 } from "@nextui-org/react";
 import {
   Settings,
@@ -18,6 +19,7 @@ import {
   PaletteIcon,
   Maximize2,
   Minimize2,
+  AlertTriangle,
 } from "lucide-react";
 import Loader from "./Loader";
 
@@ -53,17 +55,28 @@ const MonacoEditor = ({ isConsoleMinimized, height = "h-[55vh]" }) => {
     dispatch(setCodeEditortheme(newTheme));
   }, [theme, dispatch]);
 
+  // Define languages with their availability status
   const languages = [
-    "javascript",
-    "typescript",
-    "python",
-    "java",
-    "cpp",
-    "csharp",
-    "html",
-    "css",
-    "json",
+    { id: "javascript", label: "JavaScript", available: true },
+    { id: "typescript", label: "TypeScript", available: true },
+    { id: "python", label: "Python", available: false },
+    { id: "java", label: "Java", available: false },
+    { id: "cpp", label: "C++", available: false },
+    { id: "csharp", label: "C#", available: false },
   ];
+
+  // Filter available languages for the language selector
+  const availableLanguages = languages.filter((lang) => lang.available);
+
+  // Function to handle language selection
+  const handleLanguageSelect = (langId) => {
+    const selectedLang = languages.find((l) => l.id === langId);
+    if (selectedLang && !selectedLang.available) {
+      console.warn(`${selectedLang.label} interpreter is not yet available`);
+      return;
+    }
+    dispatch(setLanguage(langId));
+  };
 
   const themes = [
     { name: "VS Dark", value: "vs-dark" },
@@ -199,7 +212,7 @@ const MonacoEditor = ({ isConsoleMinimized, height = "h-[55vh]" }) => {
             Code Editor
           </span>
         </div>
-        <div className="flex items-center gap-2">
+        {/* <div className="flex items-center gap-2">
           <Button variant="ghost" size="sm" isIconOnly>
             {isConsoleMinimized ? (
               <Maximize2 className="h-4 w-4" />
@@ -207,29 +220,51 @@ const MonacoEditor = ({ isConsoleMinimized, height = "h-[55vh]" }) => {
               <Minimize2 className="h-4 w-4" />
             )}
           </Button>
-        </div>
+        </div> */}
       </div>
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center px-4 pt-4">
           <div className="flex gap-2">
-            <Dropdown size="sm">
+            {/* Language Selector */}
+            <Dropdown>
               <DropdownTrigger>
                 <Button
-                  isDisabled={!isEditorReady}
-                  variant="flat"
+                  variant="light"
+                  startContent={<Code className="w-4" />}
                   size="sm"
-                  startContent={<Code size={18} />}
+                  className="capitalize"
                 >
-                  {language.toUpperCase()}
+                  {language}
                 </Button>
               </DropdownTrigger>
               <DropdownMenu
                 aria-label="Language selection"
-                onAction={(key) => dispatch(setLanguage(key))}
+                // variant="flat"
+                disallowEmptySelection
+                selectionMode="single"
                 selectedKeys={new Set([language])}
+                onSelectionChange={(keys) => {
+                  const selected = Array.from(keys)[0];
+                  handleLanguageSelect(selected);
+                }}
               >
                 {languages.map((lang) => (
-                  <DropdownItem key={lang}>{lang.toUpperCase()}</DropdownItem>
+                  <DropdownItem
+                    key={lang.id}
+                    startContent={
+                      !lang.available && (
+                        <Tooltip content="Interpreter not available yet">
+                          <AlertTriangle className="w-4 h-4 text-warning" />
+                        </Tooltip>
+                      )
+                    }
+                    className={
+                      !lang.available ? "opacity-50 cursor-not-allowed" : ""
+                    }
+                    isDisabled={!lang.available}
+                  >
+                    {lang.label}
+                  </DropdownItem>
                 ))}
               </DropdownMenu>
             </Dropdown>

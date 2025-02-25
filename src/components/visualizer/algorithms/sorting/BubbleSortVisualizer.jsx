@@ -111,7 +111,7 @@ export const BubbleSortVisualizer = () => {
         dispatch(reset());
       } else if (e.key === KEYBOARD_SHORTCUTS.RANDOMIZE.key && !isPlaying) {
         dispatch(generateNewArray(arraySize));
-        console.log("array size:", arraySize);
+        // console.log("array size:", arraySize);
       }
     };
 
@@ -219,7 +219,7 @@ export const BubbleSortVisualizer = () => {
 
   return (
     <div className="relative h-full w-full">
-      <div className="flex flex-col gap-5 w-full mt-10">
+      <div className="flex flex-col gap-5 w-full">
         <div ref={containerRef} className="visualizer-container">
           <svg ref={svgRef} />
         </div>

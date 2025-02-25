@@ -153,7 +153,7 @@ const LeftSideBar = () => {
   const handleTopicClick = (topic) => {
     if (!topic.implemented) return;
     dispatch(setCurrentView(topic.name));
-    console.log(topic);
+    // console.log(topic);
   };
 
   /**

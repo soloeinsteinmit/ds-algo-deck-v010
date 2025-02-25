@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
+import { Helmet } from "react-helmet";
 import VisualizerLoader from "../../utils/VisualizerLoader";
 import {
   Card,
@@ -27,85 +28,119 @@ function VisualizingPanel() {
   const { title, visualizer, controls, shortNotes } = VisualizerLoader({
     type: currentView,
   });
-  // Our state managers, like puppet strings for our performance
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": `${title || 'Algorithm Visualizer'} - DS.AlgoDeck`,
+    "applicationCategory": "EducationalApplication",
+    "educationalUse": "Interactive Learning",
+    "learningResourceType": "Visualization",
+    "description": `Interactive visualization panel for ${title || 'algorithms'} with step-by-step execution and controls`
+  };
+
   const dispatch = useDispatch();
   const { isEditorOpen, isListOpen } = useSelector(
     (state) => state.playgroundLayout
   );
 
   return (
-    <Card
-      className="w-full h-full flex flex-col bg-background/60 backdrop-blur-lg"
-      radius="none"
-    >
-      {/* Header */}
-      <CardHeader className="flex-none px-6 py-3 border-b border-divider bg-content2/50">
-        <div className="w-full flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            {/* The Sidebar Toggle, like a curtain's rope */}
+    <>
+      <Helmet>
+        <title>{`${title || 'Algorithm'} Visualization | DS.AlgoDeck`}</title>
+        <meta name="description" content={`Interactive visualization of ${title || 'algorithms'}. Watch step-by-step execution, control animation speed, and understand the algorithm's behavior.`} />
+        <meta name="keywords" content={`${title}, algorithm visualization, interactive learning, computer science, data structures`} />
+        <meta property="og:title" content={`${title || 'Algorithm'} Visualization - DS.AlgoDeck`} />
+        <meta property="og:description" content={`Interactive visualization panel for ${title || 'algorithms'} with step-by-step execution and controls`} />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://github.com/soloeinsteinmit/ds-algo-deck-v010/raw/main/public/preview.png" />
+        <meta property="og:url" content="https://github.com/soloeinsteinmit/ds-algo-deck-v010" />
+        <link rel="canonical" href="https://github.com/soloeinsteinmit/ds-algo-deck-v010" />
+        <meta name="author" content="soloeinsteinmit" />
+        <meta name="github:creator" content="@soloeinsteinmit" />
+        <meta name="linkedin:creator" content="@soloeinsteinmit" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${title || 'Algorithm'} Visualization - DS.AlgoDeck`} />
+        <meta name="twitter:description" content={`Watch and learn ${title || 'algorithms'} through interactive visualization`} />
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
+      </Helmet>
+      <div className="flex flex-col h-full" role="complementary" aria-label="Algorithm Visualization Panel">
+        <Card
+          className="w-full h-full flex flex-col bg-background/60 backdrop-blur-lg"
+          radius="none"
+        >
+          {/* Header */}
+          <CardHeader className="flex-none px-6 py-3 border-b border-divider bg-content2/50">
+            <div className="w-full flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                {/* The Sidebar Toggle, like a curtain's rope */}
 
-            <Button
-              onClick={() => dispatch(toggleList())}
-              className=""
-              size="sm"
-              isIconOnly
-              variant="light"
-            >
-              {isListOpen ? <PanelLeftClose /> : <PanelLeftOpen />}
-            </Button>
-
-            <h3 className="text-lg font-medium text-default-800">{title}</h3>
-            <Popover>
-              <PopoverTrigger>
-                <Button isIconOnly size="sm" variant="light">
-                  <PiInfo className="text-xl" />
+                <Button
+                  onClick={() => dispatch(toggleList())}
+                  className=""
+                  size="sm"
+                  isIconOnly
+                  variant="light"
+                >
+                  {isListOpen ? <PanelLeftClose /> : <PanelLeftOpen />}
                 </Button>
-              </PopoverTrigger>
-              <PopoverContent>
-                {shortNotes && <TopicsShortNotes noteData={shortNotes} />}
-              </PopoverContent>
-            </Popover>
-          </div>
 
-          <div className="flex">
-            {/* The Editor Toggle, like a magician's wand */}
-            <Tooltip
-              color="warning"
-              variant={`${isEditorOpen ? "solid" : "flat"}`}
-              content="Open Code Editor"
-              showArrow
-              placement="top"
-            >
-              <Button
-                onClick={() => dispatch(toggleEditor())}
-                className="mr-5"
-                size="sm"
-                color="warning"
-                isIconOnly
-                variant={`${isEditorOpen ? "solid" : "flat"}`}
-              >
-                <FaCode className="text-base" />
-              </Button>
-            </Tooltip>
-            <ThemeSwitcher size="md" color="warning" />
-          </div>
-        </div>
-      </CardHeader>
+                <h3 className="text-lg font-medium text-default-800">{title}</h3>
+                <Popover>
+                  <PopoverTrigger>
+                    <Button isIconOnly size="sm" variant="light">
+                      <PiInfo className="text-xl" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent>
+                    {shortNotes && <TopicsShortNotes noteData={shortNotes} />}
+                  </PopoverContent>
+                </Popover>
+              </div>
 
-      {/* Main Visualization Area */}
-      <CardBody className="flex-1 flex items-center justify-center p-6">
-        <div className="w-full h-full flex items-center justify-center relative">
-          {visualizer}
-        </div>
-      </CardBody>
+              <div className="flex">
+                {/* The Editor Toggle, like a magician's wand */}
+                <Tooltip
+                  color="warning"
+                  variant={`${isEditorOpen ? "solid" : "flat"}`}
+                  content="Open Code Editor"
+                  showArrow
+                  placement="top"
+                >
+                  <Button
+                    onClick={() => dispatch(toggleEditor())}
+                    className="mr-5"
+                    size="sm"
+                    color="warning"
+                    isIconOnly
+                    variant={`${isEditorOpen ? "solid" : "flat"}`}
+                  >
+                    <FaCode className="text-base" />
+                  </Button>
+                </Tooltip>
+                <ThemeSwitcher size="md" color="warning" />
+              </div>
+            </div>
+          </CardHeader>
 
-      {/* Controls Area */}
-      <CardFooter className="flex-none border-t border-divider bg-content1/50">
-        <div className="w-full h-fit max-h-64 overflow-y-auto p-4">
-          {controls}
-        </div>
-      </CardFooter>
-    </Card>
+          {/* Main Visualization Area */}
+          <CardBody className="flex-1 flex items-center justify-center p-6">
+            <div className="w-full h-full flex items-center justify-center relative">
+              {visualizer}
+            </div>
+          </CardBody>
+
+          {/* Controls Area */}
+          <CardFooter className="flex-none border-t border-divider bg-content1/50">
+            <div className="w-full h-fit max-h-64 overflow-y-auto p-4">
+              {controls}
+            </div>
+          </CardFooter>
+        </Card>
+      </div>
+    </>
   );
 }
 

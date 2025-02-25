@@ -119,6 +119,22 @@ export const linearSearchVisualizerSlice = createSlice({
     },
     setIsPlaying: (state, action) => {
       state.isPlaying = action.payload;
+      if (state.searchTarget === state.array[state.foundIndex]) {
+        console.log(
+          "state.searchTarget === array[foundIndex]",
+          state.searchTarget,
+          state.array[state.foundIndex]
+        );
+        state.isPlaying = false;
+        state.isPaused = false;
+        return;
+      }
+      if (state.searchComplete === true) {
+        console.log("state.searchComplete", state.searchComplete);
+        state.isPlaying = false;
+        state.isPaused = false;
+        return;
+      }
       if (action.payload) {
         state.isPaused = false;
       }

@@ -229,11 +229,14 @@ const StyledWrapper = styled.div`
   }
 `;
 
-export const CustomButton1 = ({ text = "Discover" }) => {
-  const navigate = useNavigate();
+export const CustomButton1 = ({
+  text = "Discover",
+  navigate = "/dashboard",
+}) => {
+  const navi = useNavigate();
   return (
     <StyledWrapper1>
-      <button id="bottone1" onClick={() => navigate("/dashboard")}>
+      <button id="bottone1" onClick={() => navi(navigate)}>
         <strong>{text}</strong>
       </button>
     </StyledWrapper1>

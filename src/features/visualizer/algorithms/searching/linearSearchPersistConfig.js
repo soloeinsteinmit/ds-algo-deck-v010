@@ -12,9 +12,9 @@ export const linearSearchPersistConfig = {
     "isPaused",
     "animationSpeed",
     "arraySize",
-    "lastPlayedStep",
-    "visitedIndices",
-    "currentSearchIndex",
-    "searchState",
+    "visitedIndices", // Track visited indices as array
+    "currentIndex", // Current index being searched
+    "searchComplete", // Whether search is complete
+    "foundIndex",
   ],
 };

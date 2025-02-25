@@ -205,7 +205,7 @@ function LinearSearchVisualizer() {
 
   return (
     <div className="linear-search-container">
-      <div className="array-container">
+      <div className="array-container  max-h-[600px] overflow-y-auto">
         {array.map((value, index) => (
           <ArrayElement
             key={index}
