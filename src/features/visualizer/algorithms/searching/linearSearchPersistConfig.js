@@ -5,14 +5,16 @@ export const linearSearchPersistConfig = {
   storage,
   whitelist: [
     "array",
-    "target",
-    "currentIndex",
+    "searchTarget",
+    "searchSteps",
+    "currentStep",
     "isPlaying",
     "isPaused",
     "animationSpeed",
-    "searchingSteps",
-    "currentStep",
-    "isFound",
+    "arraySize",
+    "visitedIndices", // Track visited indices as array
+    "currentIndex", // Current index being searched
+    "searchComplete", // Whether search is complete
     "foundIndex",
   ],
 };

@@ -88,7 +88,7 @@ export default function NavbarComponent({
 
       <NavbarContent as="div" justify="end">
         {showThemeSwitcher && <ThemeSwitcher size="md" color="warning" />}
-        <Dropdown placement="bottom-end">
+        {/* <Dropdown placement="bottom-end">
           <DropdownTrigger>
             <Avatar
               isBordered
@@ -114,7 +114,7 @@ export default function NavbarComponent({
               </DropdownItem>
             ))}
           </DropdownMenu>
-        </Dropdown>
+        </Dropdown> */}
       </NavbarContent>
     </Navbar>
   );

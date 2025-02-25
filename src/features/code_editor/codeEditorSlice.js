@@ -1,10 +1,38 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  code: "// Start coding here...",
+  code: `// 🚀 Welcome to DS.AlgoDeck Code Editor! 
+
+/**
+ * 🎮 Coming Soon: Interactive Algorithm Visualizations!
+ * Soon you'll be able to:
+ * - Write code that directly controls the visualizers
+ * - Test your implementations in real-time
+ * - See your algorithms come to life visually
+ * 
+ * For now, you can:
+ * 1. Write and run JavaScript/TypeScript code
+ * 2. Use the built-in console for output
+ * 3. Experiment with different algorithms
+ * 
+ * Example:
+ */
+
+console.log("Hello, Algorithm Explorer! 👋");
+
+// Try this simple array manipulation:
+const numbers = [64, 34, 25, 12, 22, 11, 90];
+console.log("Original array:", numbers);
+
+// Sort the array
+numbers.sort((a, b) => a - b);
+console.log("Sorted array:", numbers);
+
+// Soon you'll see this sorting process animated! ✨
+`,
   language: "javascript",
   codeEditortheme: "vs-dark",
-  fontSize: 16,
+  fontSize: 14,
 };
 
 const codeEditorSlice = createSlice({

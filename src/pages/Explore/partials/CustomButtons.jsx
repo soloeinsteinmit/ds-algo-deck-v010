@@ -6,7 +6,7 @@ export const CustomButton = ({ label = "Get Started" }) => {
   const navigate = useNavigate();
   return (
     <StyledWrapper>
-      <button className="button" onClick={() => navigate("/dashboard")}>
+      <button className="button" onClick={() => navigate("/playground")}>
         <div className="dots_border" />
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -229,10 +229,14 @@ const StyledWrapper = styled.div`
   }
 `;
 
-export const CustomButton1 = ({ text = "Discover" }) => {
+export const CustomButton1 = ({
+  text = "Discover",
+  navigate = "/dashboard",
+}) => {
+  const navi = useNavigate();
   return (
     <StyledWrapper1>
-      <button id="bottone1">
+      <button id="bottone1" onClick={() => navi(navigate)}>
         <strong>{text}</strong>
       </button>
     </StyledWrapper1>

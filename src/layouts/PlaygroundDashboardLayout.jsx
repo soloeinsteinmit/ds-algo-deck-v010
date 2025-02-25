@@ -75,7 +75,7 @@ function PlaygroundDashboardLayout() {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-foreground-50">
+    <div className="h-screen overflow-hidden flex flex-col bg-foreground-50">
       {/* The noble navigation bar, standing proud atop our realm */}
       <div className="flex-none border-b-2 border-divider">
         <NavbarComponent

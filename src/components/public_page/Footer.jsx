@@ -20,10 +20,25 @@ function Footer() {
           <div className="flex flex-col gap-5">
             <p className="font-bold text-2xl">Quick Links</p>
             <div className="flex flex-col gap-5 text-base">
-              <NavLink to={"/"}>Explore🔎</NavLink>
-              <NavLink to="resources">Resources📚</NavLink>
-              <NavLink to={"playground"}>Playground🛠🛝</NavLink>
-              <NavLink to={"profile"}>Profile Mode🧑‍💻</NavLink>
+              <NavLink
+                to={"/"}
+                className={"transition-colors hover:text-warning"}
+              >
+                Explore🔎
+              </NavLink>
+              <NavLink
+                to="dashboard"
+                className={"transition-colors hover:text-warning"}
+              >
+                Dashboard🖥️
+              </NavLink>
+              <NavLink
+                to={"playground"}
+                className={"transition-colors hover:text-warning"}
+              >
+                Playground🛠🛝
+              </NavLink>
+              {/* <NavLink to={"profile"}>Profile Mode🧑‍💻</NavLink> */}
             </div>
           </div>
           <div className=" w-[200px] flex flex-col justify-center items-start">
@@ -32,8 +47,16 @@ function Footer() {
             <Socials />
           </div>
         </div>
-        <p className="text-center mt-16 text-default-300">
-          © 2024 DS.AlgoDeck. Made with ❤️‍🔥 by Solomon Eshun.
+        <p className="text-center mt-16 text-default-400">
+          © 2024 DS.AlgoDeck. Made with ❤️‍🔥 by{" "}
+          <a
+            href="https://github.com/soloeinsteinmit"
+            target="_blank"
+            className="transition-all hover:text-warning"
+          >
+            Solomon Eshun
+          </a>
+          .
         </p>
       </div>
     </div>

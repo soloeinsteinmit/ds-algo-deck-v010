@@ -72,7 +72,7 @@ const CodeEditor = () => {
 
   return (
     <div
-      className="h-fullflex flex-col bg-background/60 backdrop-blur-lg border-l border-divider"
+      className="h-full flex flex-col bg-background/60 backdrop-blur-lg border-l border-divider"
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
     >
@@ -80,7 +80,7 @@ const CodeEditor = () => {
       <div className="flex-1 overflow-hidden">
         <MonacoEditor
           isConsoleMinimized={isConsoleMinimized}
-          height={isConsoleMinimized ? "h-[77vh]" : "h-[55vh]"}
+          height={isConsoleMinimized ? "h-[83vh]" : "h-[61vh]"}
         />
       </div>
 

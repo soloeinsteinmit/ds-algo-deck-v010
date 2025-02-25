@@ -70,7 +70,7 @@ const StyledWrapper = styled.div`
   }
 
   .card .content {
-    width: 20em;
+    width: 22em;
     max-width: 80%;
   }
 

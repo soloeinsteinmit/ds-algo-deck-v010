@@ -8,6 +8,10 @@ import {
   setCurrentStep,
   setIsPlaying,
   setPaused,
+  reset,
+  stepForward,
+  stepBackward,
+  generateNewArray,
 } from "../../../../features/visualizer/algorithms/sorting/bubbleSortVisualizerSlice";
 
 /**
@@ -21,6 +25,34 @@ import {
  * The component initializes with a default array, and uses a control panel to start sorting.
  * Sorting speed and visual updates are controlled through dispatch actions and state updates.
  */
+const KEYBOARD_SHORTCUTS = {
+  PLAY_PAUSE: {
+    key: " ",
+    description: "Play/Pause sorting",
+    combination: "Space",
+  },
+  STEP_FORWARD: {
+    key: "ArrowRight",
+    description: "Step forward",
+    combination: "→",
+  },
+  STEP_BACKWARD: {
+    key: "ArrowLeft",
+    description: "Step backward",
+    combination: "←",
+  },
+  RESET: {
+    key: "r",
+    description: "Reset sorting",
+    combination: "R",
+  },
+  RANDOMIZE: {
+    key: "n",
+    description: "New random array",
+    combination: "N",
+  },
+};
+
 export const BubbleSortVisualizer = () => {
   const svgRef = useRef(null);
   const containerRef = useRef(null);
@@ -32,6 +64,7 @@ export const BubbleSortVisualizer = () => {
     animationSpeed,
     isPaused,
     sortingSteps,
+    arraySize,
   } = useSelector((state) => state.bubbleSortVisualizer);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const animationRef = useRef(null);
@@ -60,6 +93,31 @@ export const BubbleSortVisualizer = () => {
       dispatch(setArray([64, 34, 25, 12, 22, 11, 90]));
     }
   }, []);
+
+  // Handle keyboard shortcuts
+  useEffect(() => {
+    const handleKeyPress = (e) => {
+      if (e.key === KEYBOARD_SHORTCUTS.PLAY_PAUSE.key) {
+        if (isPlaying) {
+          dispatch(setPaused(!isPaused));
+        } else {
+          dispatch(setIsPlaying(true));
+        }
+      } else if (e.key === KEYBOARD_SHORTCUTS.STEP_FORWARD.key && !isPlaying) {
+        dispatch(stepForward());
+      } else if (e.key === KEYBOARD_SHORTCUTS.STEP_BACKWARD.key && !isPlaying) {
+        dispatch(stepBackward());
+      } else if (e.key === KEYBOARD_SHORTCUTS.RESET.key) {
+        dispatch(reset());
+      } else if (e.key === KEYBOARD_SHORTCUTS.RANDOMIZE.key && !isPlaying) {
+        dispatch(generateNewArray(arraySize));
+        // console.log("array size:", arraySize);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  }, [isPlaying, isPaused]);
 
   // Handle animation
   useEffect(() => {
@@ -100,70 +158,92 @@ export const BubbleSortVisualizer = () => {
     svg
       .attr("width", width)
       .attr("height", height)
-      .attr("viewBox", `0 0 ${width} ${height}`);
+      .attr("viewBox", [0, 0, width, height])
+      .style("background-color", "transparent");
 
     const xScale = d3
       .scaleBand()
-      .domain(array.map((_, i) => i.toString()))
+      .domain(d3.range(array.length))
       .range([padding, width - padding])
       .padding(0.1);
 
     const yScale = d3
       .scaleLinear()
-      .domain([0, Math.max(...array)])
+      .domain([0, d3.max(array)])
       .range([height - padding, padding]);
 
-    const getBarColor = (index) => {
-      // If we're at the last step (sorting is complete), all bars are green
-      if (currentStep === sortingSteps.length - 1) {
-        return "#22c55e"; // Green for completed sort
-      }
-
-      // During sorting, show comparing/swapping colors
-      if (sortingSteps[currentStep]?.comparing?.includes(index)) {
-        return sortingSteps[currentStep].swapping ? "#ef4444" : "#fbbf24";
-      }
-
-      // Default color for unsorted bars
-      return "#4f46e5";
+    const currentStepDetails = sortingSteps[currentStep] || {
+      comparing: [],
+      swapping: false,
+      sortedIndices: [],
     };
 
-    // Create bars
-    svg
+    const comparing = Array.isArray(currentStepDetails.comparing)
+      ? currentStepDetails.comparing
+      : [];
+    const sortedIndices = Array.isArray(currentStepDetails.sortedIndices)
+      ? currentStepDetails.sortedIndices
+      : [];
+
+    const bars = svg
       .selectAll("rect")
       .data(array)
-      .enter()
-      .append("rect")
-      .attr("class", "bar")
-      .attr("x", (_, i) => xScale(i.toString()))
+      .join("rect")
+      .attr("x", (d, i) => xScale(i))
       .attr("y", (d) => yScale(d))
       .attr("width", xScale.bandwidth())
       .attr("height", (d) => height - padding - yScale(d))
-      .attr("fill", (_, i) => getBarColor(i))
-      .attr("rx", 4);
+      .attr("fill", (d, i) => {
+        if (sortedIndices.includes(i)) return "#17c964"; // Success green for sorted
+        if (comparing.includes(i)) return "#f5a524"; // Warning yellow for comparing
+        return "#006FEE"; // Default blue
+      })
+      .attr("rx", 4)
+      .attr("ry", 4);
 
-    // Add labels if array length is 15 or less
-    if (array.length <= 20) {
+    // Only show bar labels when array length is less than 60
+    if (array.length <= 60) {
       svg
-        .selectAll(".bar-label")
+        .selectAll("text")
         .data(array)
-        .enter()
-        .append("text")
-        .attr("class", "bar-label")
+        .join("text")
         .text((d) => d)
-        .attr("x", (_, i) => xScale(i.toString()) + xScale.bandwidth() / 2)
+        .attr("x", (d, i) => xScale(i) + xScale.bandwidth() / 2)
         .attr("y", (d) => yScale(d) - 5)
         .attr("text-anchor", "middle")
-        .attr("fill", "#4b5563");
+        .attr("fill", "currentColor")
+        .attr("font-size", "12px")
+        .attr("font-weight", "bold");
     }
-  }, [array, currentStep, sortingSteps, dimensions]);
+  }, [array, dimensions, currentStep, sortingSteps]);
 
   return (
-    <div ref={containerRef} className="visualizer-container">
-      <svg ref={svgRef} />
-      <p className="text-center text-sm text-gray-500">
-        Steps {"->"} {currentStep} / {sortingSteps.length - 1}
-      </p>
+    <div className="relative h-full w-full">
+      <div className="flex flex-col gap-5 w-full">
+        <div ref={containerRef} className="visualizer-container">
+          <svg ref={svgRef} />
+        </div>
+        <p className="text-center text-sm text-gray-500">
+          Steps {"->"} {currentStep} / {sortingSteps.length - 1}
+        </p>
+      </div>
+
+      {/* Keyboard Shortcuts Card */}
+      <div className="absolute bottom-4 right-1/2 translate-x-1/2 bg-content border border-border rounded-lg p-4 shadow-lg  w-[500px]">
+        <h3 className="text-lg font-semibold mb-2">⌨️ Keyboard Shortcuts</h3>
+        <div className="grid grid-cols-2 gap-2">
+          {Object.entries(KEYBOARD_SHORTCUTS).map(
+            ([name, { combination, description }]) => (
+              <div key={name} className="col-span-1 flex items-center">
+                <kbd className="px-2 py-1 bg-default-100 rounded text-sm">
+                  {combination}
+                </kbd>
+                <span className="ml-2 text-sm">{description}</span>
+              </div>
+            )
+          )}
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Slider, Input } from "@nextui-org/react";
+import { Button, Slider, Input, Tooltip } from "@nextui-org/react";
 import {
   setArray,
   setCurrentStep,
@@ -10,8 +10,16 @@ import {
   generateNewArray,
   stepForward,
   stepBackward,
+  setArraySize,
 } from "../../../../features/visualizer/algorithms/sorting/bubbleSortVisualizerSlice";
 import { useState } from "react";
+import {
+  CirclePause,
+  CirclePlay,
+  CircleStop,
+  SkipBack,
+  SkipForward,
+} from "lucide-react";
 
 /**
  * A React component that renders a set of controls for the Bubble Sort visualizer.
@@ -39,58 +47,89 @@ export const BubbleSortControls = () => {
     isPaused,
     currentStep,
     sortingSteps,
+    arraySize,
   } = useSelector((state) => state.bubbleSortVisualizer);
-  const [arraySize, setArraySize] = useState(array.length);
+  // const [arraySize, setArraySize] = useState(array.length);
 
   return (
-    <div className=" p-4 space-y-4">
+    <div className="p-4 space-y-4 flex items-center justify-center">
       <div className="flex gap-4 items-center">
         {!isPlaying && !isPaused && (
-          <Button color="primary" onClick={() => dispatch(setIsPlaying(true))}>
+          <Button
+            color="primary"
+            onClick={() => dispatch(setIsPlaying(true))}
+            className="min-w-[130px]"
+          >
             Start Sorting
           </Button>
         )}
 
         {isPlaying && !isPaused && (
-          <Button color="warning" onClick={() => dispatch(setPaused(true))}>
-            Pause
-          </Button>
+          <Tooltip content="Pause" showArrow placement="bottom">
+            <Button
+              color="warning"
+              onClick={() => dispatch(setPaused(true))}
+              isIconOnly
+            >
+              {/* Pause */}
+              <CirclePause />
+            </Button>
+          </Tooltip>
         )}
 
         {isPaused && (
-          <Button color="primary" onClick={() => dispatch(setPaused(false))}>
-            Resume
-          </Button>
+          <Tooltip content="Resume" showArrow placement="bottom">
+            <Button
+              color="primary"
+              onClick={() => dispatch(setPaused(false))}
+              isIconOnly
+            >
+              {/* Resume */}
+              <CirclePlay />
+            </Button>
+          </Tooltip>
         )}
 
-        <Button
-          color="danger"
-          onClick={() => dispatch(reset())}
-          isDisabled={!isPlaying && !isPaused}
-        >
-          Stop
-        </Button>
+        <Tooltip content="Stop" showArrow placement="bottom">
+          <Button
+            color="danger"
+            onClick={() => dispatch(reset())}
+            isDisabled={!isPlaying && !isPaused}
+            isIconOnly
+          >
+            <CircleStop />
+          </Button>
+        </Tooltip>
 
-        <Button
-          color="default"
-          onClick={() => dispatch(stepBackward())}
-          isDisabled={isPlaying || currentStep === 0}
-        >
-          Step Back
-        </Button>
+        <Tooltip content="Step Back" showArrow placement="bottom">
+          <Button
+            color="default"
+            onClick={() => dispatch(stepBackward())}
+            isDisabled={isPlaying || currentStep === 0}
+            isIconOnly
+          >
+            {/* Step Back */}
+            <SkipBack />
+          </Button>
+        </Tooltip>
 
-        <Button
-          color="default"
-          onClick={() => dispatch(stepForward())}
-          isDisabled={isPlaying || currentStep === sortingSteps.length - 1}
-        >
-          Step Forward
-        </Button>
+        <Tooltip content="Step Forward" showArrow placement="bottom">
+          <Button
+            color="default"
+            onClick={() => dispatch(stepForward())}
+            isDisabled={isPlaying || currentStep === sortingSteps.length - 1}
+            isIconOnly
+          >
+            {/*   */}
+            <SkipForward />
+          </Button>
+        </Tooltip>
 
         <Button
           color="secondary"
           onClick={() => dispatch(generateNewArray(arraySize))}
           isDisabled={isPlaying || isPaused}
+          className="min-w-[100px]"
         >
           Randomize
         </Button>
@@ -99,22 +138,23 @@ export const BubbleSortControls = () => {
           type="number"
           label="Array Size"
           value={arraySize}
-          onChange={(e) => setArraySize(Number(e.target.value))}
+          onChange={(e) => dispatch(setArraySize(Number(e.target.value)))}
           min={2}
-          max={100}
-          className="w-32"
+          max={200}
+          className="min-w-[120px]"
           isDisabled={isPlaying || isPaused}
         />
         <div className="flex items-center gap-4">
-          <span className="text-sm">Animation Speed:</span>
+          {/* <span className="text-sm">Animation Speed:</span> */}
           <Slider
             value={animationSpeed}
             onChange={(value) => dispatch(setAnimationSpeed(value))}
             minValue={5}
             maxValue={100}
-            step={0.5}
-            className="w-48"
-            aria-label="Animation Speed"
+            step={0.1}
+            className="w-44"
+            label="Sorting Speed"
+            aria-label="Sorting Speed"
           />
         </div>
       </div>

@@ -1,6 +1,9 @@
 import { Switch, VisuallyHidden, useSwitch } from "@nextui-org/react";
+import { dispatch } from "d3";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { setAppTheme } from "../../src/features/playground/playgroundLayoutSlice";
 
 /**
  * ThemeSwitcher component allows users to toggle between light and dark themes.
@@ -19,6 +22,7 @@ import { useEffect, useState } from "react";
  * @returns {JSX.Element|null} The rendered ThemeSwitcher component or null if not mounted.
  */
 export const ThemeSwitcher = (props) => {
+  const dispatch = useDispatch();
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -33,7 +37,8 @@ export const ThemeSwitcher = (props) => {
     ...props,
     // Initialize isSelected based on current theme
     defaultSelected: theme === "light",
-    onChange: () => setTheme(isSelected ? "dark" : "light"),
+    onChange: () =>
+      dispatch(setAppTheme(setTheme(isSelected ? "dark" : "light"))),
   });
 
   // Handle mounting

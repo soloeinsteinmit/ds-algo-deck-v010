@@ -153,7 +153,7 @@ const LeftSideBar = () => {
   const handleTopicClick = (topic) => {
     if (!topic.implemented) return;
     dispatch(setCurrentView(topic.name));
-    console.log(topic);
+    // console.log(topic);
   };
 
   /**
@@ -268,7 +268,7 @@ const LeftSideBar = () => {
               Topics
             </Button>
           </div>
-          <Tooltip content="Show Implemented Only" showArrow placement="top">
+          <Tooltip content="Show Implemented Only" showArrow placement="bottom">
             <Button
               size="sm"
               isIconOnly

@@ -10,5 +10,6 @@ export const bubbleSortPersistConfig = {
     "sortingSteps",
     "currentStep",
     "animationSpeed",
+    "arraySize",
   ], // Only persist these fields
 };

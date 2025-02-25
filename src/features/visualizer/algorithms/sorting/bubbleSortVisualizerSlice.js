@@ -9,13 +9,20 @@ const initialState = {
   isPlaying: false,
   animationSpeed: 5,
   isPaused: false,
+  arraySize: 20,
 };
 
-// Helper function to generate sorting steps
+/*
+ * Hark! Dear fellow programmer, gather 'round,
+ * For here lies the tale of sorting most profound.
+ * In this sacred scroll of JavaScript divine,
+ * We track the elements that fall in line.
+ */
 const generateSortingSteps = (arr) => {
   const steps = [];
   const n = arr.length;
   const tempArray = [...arr];
+  const sortedIndices = new Set(); // Verily, we keep track of sorted elements
 
   for (let i = 0; i < n - 1; i++) {
     for (let j = 0; j < n - i - 1; j++) {
@@ -23,6 +30,7 @@ const generateSortingSteps = (arr) => {
         array: [...tempArray],
         comparing: [j, j + 1],
         swapping: false,
+        sortedIndices: [...sortedIndices], // Lo, we share our sorted indices
       });
 
       if (tempArray[j] > tempArray[j + 1]) {
@@ -31,10 +39,22 @@ const generateSortingSteps = (arr) => {
           array: [...tempArray],
           comparing: [j, j + 1],
           swapping: true,
+          sortedIndices: [...sortedIndices],
         });
       }
     }
+    // Forsooth! Another element finds its rightful place
+    sortedIndices.add(n - 1 - i);
   }
+
+  // The final step, where all elements stand sorted
+  steps.push({
+    array: [...tempArray],
+    comparing: [],
+    swapping: false,
+    sortedIndices: [...Array(n).keys()],
+  });
+
   return steps;
 };
 
@@ -93,6 +113,9 @@ const bubbleSortVisualizerSlice = createSlice({
       state.sortingSteps = generateSortingSteps(newArray);
       state.currentStep = 0;
     },
+    setArraySize: (state, action) => {
+      state.arraySize = action.payload;
+    },
   },
 });
 
@@ -111,6 +134,7 @@ export const {
   stepBackward,
   reset,
   generateNewArray,
+  setArraySize,
 } = bubbleSortVisualizerSlice.actions;
 
 export default persistedBubbleSortReducer;

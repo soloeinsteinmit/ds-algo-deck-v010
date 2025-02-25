@@ -322,7 +322,8 @@ export default function TableComponent() {
       bottomContent={bottomContent}
       bottomContentPlacement="outside"
       classNames={{
-        wrapper: "max-h-[382px]",
+        // TODO: change this height here to 382px
+        wrapper: "max-h-[330px] transition-all max-[1576px]:max-h-[200px]",
       }}
       selectedKeys={selectedKeys}
       selectionMode="multiple"
